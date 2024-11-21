@@ -17,19 +17,24 @@ form.addEventListener("submit", function(event) {
 
 
 // 2. Add User Input to top of To-Do list
+
 let paragraphIndex = 0
+// Get parent element
+const toDoList = document.getElementById("toDoList");
+
 
 function addNewTask() {
-    // Get parent element
-    const toDoList = document.getElementById("toDoList");
-    
     // Create child element
     const listItem = document.createElement('div');
     listItem.className = 'listItem';
-    
+
+    listItem.id = `${paragraphIndex}`
+    console.log(`This is the new task's id: ${paragraphIndex}`)
+
     listItem.innerHTML = `
         <input type="checkbox">
         <p id="itemText${paragraphIndex}">${newTask}</p>
+        <button class="remove-button" type="button" onclick="removeTask(${paragraphIndex})">x</button>
     `;
     
     // Append child element to parent element
@@ -42,8 +47,10 @@ function addNewTask() {
 // 3. Remove a specified task from list (minus button)
 // removeChild()
 
-function removeTask() {
-
+function removeTask(taskId) {
+    // Get child element
+    const selectedTask = document.getElementById(taskId)
+    toDoList.removeChild(selectedTask)
 
     paragraphIndex--
 }
