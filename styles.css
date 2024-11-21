@@ -54,7 +54,7 @@ input[type="checkbox"]:checked {
     background-color: red;
 }
 
-.itemText {
+#itemText0, #itemText1, #itemText2, #itemText3 {
     color: brown;
     display: inline-block;
     margin: 0;
