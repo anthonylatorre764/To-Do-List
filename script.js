@@ -1,58 +1,52 @@
-console.log("testing123")
-
-// Organize steps below into functions //
-
+console.log("testing123")   // test connection to html document
 
 
 // 1. Get User Input
 let newTask = ''
+
 let form = document.querySelector("form")
 
 form.addEventListener("submit", function(event) {
     event.preventDefault();
     newTask = document.getElementById("inputField").value;
+    document.getElementById("inputField").value = '';  // clears input field
     addNewTask()
 });
 
 
 
 // 2. Add User Input to top of To-Do list
-
-let paragraphIndex = 0
-// Get parent element
-const toDoList = document.getElementById("toDoList");
-
+let itemIndex = 0
+const toDoList = document.getElementById("toDoList");      // get parent element
 
 function addNewTask() {
     // Create child element
     const listItem = document.createElement('div');
     listItem.className = 'listItem';
 
-    listItem.id = `${paragraphIndex}`
-    console.log(`This is the new task's id: ${paragraphIndex}`)
+    listItem.id = `${itemIndex}`
+    console.log(`This is the new task's id: ${itemIndex}`)
 
     listItem.innerHTML = `
         <input type="checkbox">
-        <p id="itemText${paragraphIndex}">${newTask}</p>
-        <button class="remove-button" type="button" onclick="removeTask(${paragraphIndex})">x</button>
+        <p id="itemText${itemIndex}">${newTask}</p>
+        <button class="remove-button" type="button" onclick="removeTask(${itemIndex})">x</button>
     `;
     
     // Append child element to parent element
     toDoList.appendChild(listItem);
-    paragraphIndex++;
+    itemIndex++;
 }
 
 
 
-// 3. Remove a specified task from list (minus button)
-// removeChild()
-
+// 3. Remove a specified task from list (x button)
 function removeTask(taskId) {
     // Get child element
     const selectedTask = document.getElementById(taskId)
     toDoList.removeChild(selectedTask)
 
-    paragraphIndex--
+    itemIndex--
 }
 
 

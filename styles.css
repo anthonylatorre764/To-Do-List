@@ -1,3 +1,4 @@
+/* Title */
 h1 {
     color: black;
     font-size: 60px;
@@ -5,6 +6,8 @@ h1 {
     text-decoration: underline;
 }
 
+
+/* Add New Task Form */
 form {
     width: 600px;
     height: 30px;
@@ -29,6 +32,8 @@ input[type="text"] {
     font-size: 16px;
 }
 
+
+/* To Do List */
 ul {
     background-color: lightgrey;
     width: 80%;
@@ -60,7 +65,6 @@ input[type="checkbox"]:checked {
     margin: 0;
     width: 93.5%;
 }
-
 
 .remove-button {
     display: inline-block;
