@@ -8,11 +8,20 @@
     </head>
     <body>
         <h1>To Do List</h1>
-        <form>
-            <button id="addButton">Add</button>
-            <input id="inputField" type="text" placeholder="Enter a new task here">
-        </form>
-        <button id="capButton" onclick="toggleCap()">capitalize on / off</button>
+        <div id="form-settings-box">
+            <div id="hiddenDiv" class="sideBox"></div>
+            <form>
+                <button id="addButton">Add</button>
+                <input id="inputField" type="text" placeholder="Enter a new task here">
+            </form>
+            <div class="sideBox">
+                <button id="capButton" onclick="toggleCap()">capitalize on / off</button>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
         <ul id="toDoList"></ul>
         <script src="script.js"></script>
     </body>
