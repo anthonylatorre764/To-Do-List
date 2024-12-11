@@ -1,0 +1,18 @@
+To Do:
+
+	1.	Create Settings Page
+
+	2.	Add the following settings:
+		  ⁃ “Auto-Capitalization”		(toggle switch)
+		  ⁃ “Change Color Theme”		(drop-down menu)
+		  ⁃ “Bullet Style”				(drop-down menu)
+		  ⁃ “Font Style”				(drop-down menu)
+
+	3.	Use Local Storage to keep to-do-list items on the page after a page 
+		refresh
+
+	4.	Improve styling for “Add” button and the To Do List
+
+	5.	Make Main page and Settings page responsive for different size windows 
+		on desktop and other devices like smartphone and tablet
+		  ⁃ Use CSS Media Queries and Breakpoints (min-width & max-width)

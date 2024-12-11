@@ -17,7 +17,6 @@ form.addEventListener("submit", function(event) {
 });
 
 
-
 // 2. Add User Input to top of To-Do list
 let itemIndex = 0
 const toDoList = document.getElementById("toDoList");      // get parent element
@@ -26,21 +25,38 @@ function addNewTask() {
     // Create child element
     const listItem = document.createElement('div');
     listItem.className = 'listItem';
-
+    
     listItem.id = `${itemIndex}`;
     console.log(`This is the new task's id: ${itemIndex}`);
-
+    
     listItem.innerHTML = `
-        <input type="checkbox">
-        <p id="itemText${itemIndex}">${newTask}</p>
-        <button class="remove-button" type="button" onclick="removeTask(${itemIndex})">x</button>
+    <input type="checkbox">
+    <p id="itemText${itemIndex}">${newTask}</p>
+    <button class="remove-button" type="button" onclick="removeTask(${itemIndex})">x</button>
     `;
     
     // Append child element to parent element
     toDoList.appendChild(listItem);
     itemIndex++;
     updateVisibility();
+    saveTask(newTask);
 }
+
+
+
+// **This Section Needs to be Revised**
+// Add Task to Local Storage
+function saveTask(task) {
+    localStorage.setItem(itemIndex, task);
+}
+
+function loadTasks() {
+    const storedTask = localStorage.getItem(itemIndex);
+    console.log(storedTask + '^^')
+}
+
+loadTasks();
+
 
 
 
@@ -85,16 +101,16 @@ function toggleCap() {
     }
 }
 
-const capButton = document.getElementById("capButton");
-capButton.style.backgroundColor = 'green';
+// const capButton = document.getElementById("capButton");
+// capButton.style.backgroundColor = 'green';
 
-capButton.addEventListener("click", function(){
-    if (capButton.style.backgroundColor === 'green') {
-        capButton.style.backgroundColor = 'red';
-    } else {
-        capButton.style.backgroundColor = 'green';
-    }
-});
+// capButton.addEventListener("click", function(){
+//     if (capButton.style.backgroundColor === 'green') {
+//         capButton.style.backgroundColor = 'red';
+//     } else {
+//         capButton.style.backgroundColor = 'green';
+//     }
+// });
 
 
 
