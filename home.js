@@ -17,17 +17,20 @@ form.addEventListener("submit", function(event) {
 });
 
 
+
+
 // 2. Add User Input to top of To-Do list
 let itemIndex = 0
+let stringIndex = ''
+let listItem = ''
 const toDoList = document.getElementById("toDoList");      // get parent element
 
 function addNewTask() {
     // Create child element
-    const listItem = document.createElement('div');
+    listItem = document.createElement('div');
     listItem.className = 'listItem';
     
     listItem.id = `${itemIndex}`;
-    console.log(`This is the new task's id: ${itemIndex}`);
     
     listItem.innerHTML = `
     <input type="checkbox">
@@ -37,27 +40,54 @@ function addNewTask() {
     
     // Append child element to parent element
     toDoList.appendChild(listItem);
-    itemIndex++;
+    stringIndex = itemIndex.toString();
     updateVisibility();
     saveTask(newTask);
+    itemIndex++;
 }
 
 
 
-// **This Section Needs to be Revised**
-// Add Task to Local Storage
+
+
 function saveTask(task) {
     localStorage.setItem(itemIndex, task);
 }
 
 function loadTasks() {
-    const storedTask = localStorage.getItem(itemIndex);
-    console.log(storedTask + '^^')
+    // Display saved tasks
+    for (let i = 0; i < localStorage.length; i++) {
+        // Add new element for each task
+        listItem = document.createElement('div');
+        listItem.className = 'listItem';
+        let key = localStorage.key(i);
+        let value = localStorage.getItem(key);
+    
+        listItem.id = `${key}`;
+    
+        listItem.innerHTML = `
+        <input type="checkbox">
+        <p id="itemText${key}">${value}</p>
+        <button class="remove-button" type="button" onclick="removeTask(${key})">x</button>
+        `;
+        
+        // Append child element to parent element
+        toDoList.appendChild(listItem);
+        updateVisibility();
+    }
+
 }
 
 loadTasks();
 
 
+
+// Clear All Tasks
+function clearTasks() {
+    localStorage.clear();
+    toDoList.innerHTML = '';
+    updateVisibility();
+}
 
 
 // 3. Remove a specified task from list (x button)
@@ -65,6 +95,7 @@ function removeTask(taskId) {
     // Get child element
     const selectedTask = document.getElementById(taskId);
     toDoList.removeChild(selectedTask);
+    localStorage.removeItem(taskId)
 
     itemIndex--;
     updateVisibility();
@@ -80,7 +111,6 @@ function updateVisibility() {
         toDoList.style.display = 'none';
     }
 }
-
 
 
 // capitalizes the first word of user's input
@@ -100,18 +130,3 @@ function toggleCap() {
         capitalize = true;
     }
 }
-
-// const capButton = document.getElementById("capButton");
-// capButton.style.backgroundColor = 'green';
-
-// capButton.addEventListener("click", function(){
-//     if (capButton.style.backgroundColor === 'green') {
-//         capButton.style.backgroundColor = 'red';
-//     } else {
-//         capButton.style.backgroundColor = 'green';
-//     }
-// });
-
-
-
-// Bonus: Keep tasks on page after page is refreshed (local storage)
