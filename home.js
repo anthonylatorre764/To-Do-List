@@ -19,11 +19,11 @@ form.addEventListener("submit", function(event) {
 
 
 
-// 2. Add User Input to top of To-Do list
+// 2. Add User Input to To-Do list
 let itemIndex = 0
 let stringIndex = ''
 let listItem = ''
-const toDoList = document.getElementById("toDoList");      // get parent element
+const toDoList = document.getElementById("toDoList");     // get parent element
 
 function addNewTask() {
     // Create child element
@@ -35,7 +35,8 @@ function addNewTask() {
     listItem.innerHTML = `
     <input type="checkbox">
     <p id="itemText${itemIndex}">${newTask}</p>
-    <button class="remove-button" type="button" onclick="removeTask(${itemIndex})">x</button>
+    <button class="remove-button" type="button"
+    onclick="removeTask(${itemIndex})">x</button>
     `;
     
     // Append child element to parent element
@@ -48,34 +49,43 @@ function addNewTask() {
 
 
 
+let allTasks = {};
+localStorage.setItem('tasks', JSON.stringify(allTasks));
 
 
 function saveTask(task) {
-    localStorage.setItem(itemIndex, task);
+    allTasks.itemIndex = task
+    console.log(itemIndex)
+    console.log(allTasks)
+    console.log("saveTask has executed.")   // for testing
 }
 
 function loadTasks() {
     // Display saved tasks
-    for (let i = 0; i < localStorage.length; i++) {
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+    let tasksLength = Object.keys(tasks).length;
+
+    console.log(tasksLength)
+    for (let i = 0; i < tasksLength; i++) {
         // Add new element for each task
         listItem = document.createElement('div');
         listItem.className = 'listItem';
-        let key = localStorage.key(i);
-        let value = localStorage.getItem(key);
+        let key = localStorage.tasks[i];
+        let value = localStorage.tasks[key];
     
         listItem.id = `${key}`;
     
         listItem.innerHTML = `
         <input type="checkbox">
         <p id="itemText${key}">${value}</p>
-        <button class="remove-button" type="button" onclick="removeTask(${key})">x</button>
+        <button class="remove-button" type="button"
+        onclick="removeTask(${key})">x</button>
         `;
         
         // Append child element to parent element
         toDoList.appendChild(listItem);
         updateVisibility();
     }
-
 }
 
 loadTasks();
@@ -84,7 +94,7 @@ loadTasks();
 
 // Clear All Tasks
 function clearTasks() {
-    localStorage.clear();
+    allTasks = {};
     toDoList.innerHTML = '';
     updateVisibility();
 }
@@ -92,11 +102,14 @@ function clearTasks() {
 
 // 3. Remove a specified task from list (x button)
 function removeTask(taskId) {
-    // Get child element
+    // Get / remove child element from frontend
     const selectedTask = document.getElementById(taskId);
     toDoList.removeChild(selectedTask);
-    localStorage.removeItem(taskId)
-
+    
+    // Remove from backend (localStorage)
+    // localStorage.removeItem(tasks[taskId]);
+    delete allTasks[taskId]
+    console.log(allTasks)
     itemIndex--;
     updateVisibility();
 }
