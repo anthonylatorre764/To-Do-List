@@ -1,4 +1,5 @@
-console.log("testing123")   // test connection to html document
+console.log("testing123")   // test connection to home.html
+
 
 
 // 1. Get User Input
@@ -20,9 +21,9 @@ form.addEventListener("submit", function(event) {
 
 
 // 2. Add User Input to To-Do list
-let itemIndex = 0
-let stringIndex = ''
-let listItem = ''
+let parsedIndex = JSON.parse(localStorage.getItem('index'));
+let listItem = '';
+let tasksObject = null;
 const toDoList = document.getElementById("toDoList");     // get parent element
 
 function addNewTask() {
@@ -30,54 +31,66 @@ function addNewTask() {
     listItem = document.createElement('div');
     listItem.className = 'listItem';
     
-    listItem.id = `${itemIndex}`;
+    listItem.id = `${parsedIndex}`;
     
     listItem.innerHTML = `
     <input type="checkbox">
-    <p id="itemText${itemIndex}">${newTask}</p>
+    <p id="itemText${parsedIndex}">${newTask}</p>
     <button class="remove-button" type="button"
-    onclick="removeTask(${itemIndex})">x</button>
+    onclick="removeTask(${parsedIndex})">x</button>
     `;
     
     // Append child element to parent element
     toDoList.appendChild(listItem);
-    stringIndex = itemIndex.toString();
-    updateVisibility();
     saveTask(newTask);
-    itemIndex++;
+    updateVisibility();
+
+    updateIndex('+');
 }
 
 
+function updateIndex(sign) {
+    parsedIndex = JSON.parse(localStorage.getItem('index'));
+    console.log(parsedIndex);
 
-let allTasks = {};
-localStorage.setItem('tasks', JSON.stringify(allTasks));
+    if (sign === '+') {
+        parsedIndex++;
+    } else {
+        parsedIndex--;
+    }
+
+    localStorage.setItem('index', JSON.stringify(parsedIndex));
+}
+
 
 
 function saveTask(task) {
-    allTasks.itemIndex = task
-    console.log(itemIndex)
-    console.log(allTasks)
-    console.log("saveTask has executed.")   // for testing
+    // get all tasks as an object
+    tasksObject = JSON.parse(localStorage.getItem("tasks"));
+    tasksObject[parsedIndex] = task;
+
+    // put updated object back into localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasksObject));
 }
+
+
 
 function loadTasks() {
     // Display saved tasks
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
-    let tasksLength = Object.keys(tasks).length;
+    tasksObject = JSON.parse(localStorage.getItem("tasks")) || {};
+    let tasksLength = Object.keys(tasksObject).length;
 
-    console.log(tasksLength)
+    // Add new element for each task
     for (let i = 0; i < tasksLength; i++) {
-        // Add new element for each task
         listItem = document.createElement('div');
         listItem.className = 'listItem';
-        let key = localStorage.tasks[i];
-        let value = localStorage.tasks[key];
-    
+        let key = i;
+        let value = tasksObject[key];    
         listItem.id = `${key}`;
     
         listItem.innerHTML = `
         <input type="checkbox">
-        <p id="itemText${key}">${value}</p>
+        <p id="itemText${key.toString()}">${value}</p>
         <button class="remove-button" type="button"
         onclick="removeTask(${key})">x</button>
         `;
@@ -94,23 +107,37 @@ loadTasks();
 
 // Clear All Tasks
 function clearTasks() {
-    allTasks = {};
+    localStorage.setItem('tasks', JSON.stringify({}));
+    localStorage.setItem('index', 0);
     toDoList.innerHTML = '';
     updateVisibility();
 }
 
 
+
 // 3. Remove a specified task from list (x button)
 function removeTask(taskId) {
-    // Get / remove child element from frontend
+    // Remove from frontend
     const selectedTask = document.getElementById(taskId);
     toDoList.removeChild(selectedTask);
     
-    // Remove from backend (localStorage)
-    // localStorage.removeItem(tasks[taskId]);
-    delete allTasks[taskId]
-    console.log(allTasks)
-    itemIndex--;
+    // Remove from backend
+    tasksObject = JSON.parse(localStorage.getItem("tasks"));
+    delete tasksObject[taskId];
+
+    // Re-index tasks
+    let tasksLength = Object.keys(tasksObject).length;
+
+    if (tasksLength > 0) {
+        let values = Object.values(tasksObject);
+        tasksObject = {};
+        for (let i = 0; i < tasksLength; i++) {
+            tasksObject[i] = values[i];
+        }
+        localStorage.setItem('tasks', JSON.stringify(tasksObject));
+    }
+
+    updateIndex('-');
     updateVisibility();
 }
 
@@ -124,6 +151,7 @@ function updateVisibility() {
         toDoList.style.display = 'none';
     }
 }
+
 
 
 // capitalizes the first word of user's input
